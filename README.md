@@ -1,2 +1,2 @@
 # carsharing
-carsharing demo app that uses Python FastAPI 
+carsharing demo API that uses Python FastAPI 
