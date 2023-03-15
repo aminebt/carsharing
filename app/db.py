@@ -1,7 +1,10 @@
 from sqlmodel import create_engine, Session
+import os
+
+db_location = os.environ.get("DB_LOCATION", ".")
 
 engine = create_engine(
-  "sqlite:///carsharing.db",
+  f"sqlite:///{db_location}/carsharing.db",
   connect_args={"check_same_thread": False}, # Needed for SQLite
   echo=True # Log generated SQL
 )

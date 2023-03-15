@@ -1,4 +1,7 @@
 import uvicorn
+import os 
+from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.openapi.docs import (
     get_redoc_html,
@@ -14,6 +17,34 @@ from routers import cars
 app = FastAPI(title="Car Sharing", docs_url=None, redoc_url=None)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+@app.get("/env/{MY_ENV_VAR}")
+def demo_env(MY_ENV_VAR: str):
+    return {"Hello": f"From: {os.environ.get(MY_ENV_VAR, 'No such env var')}"}
+
+
+@app.get("/allenv")
+def demo_env():
+    return {key: value for key, value in os.environ.items()}
+
+
+@app.get("/whereami")
+def demo_cm():
+    return {f"current directory: {os.getcwd()}"}
+
+
+@app.get("/displayfile")
+def display_file():
+    file = os.environ.get("FILE_LOCATION")
+    if not file:
+        return {"error": "env var FILE_LOCATION not set"}
+    path = Path(file)
+    if path.is_file():
+        with open(path, 'r') as f:
+            return {"file location": file,
+                    "file content": f.read()}
+    else:
+        return {"error": f"file {path} does not exist"}
 
 @app.get("/docs", include_in_schema=False)
 async def custom_swagger_ui_html():
