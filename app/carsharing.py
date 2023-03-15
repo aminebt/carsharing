@@ -20,7 +20,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/env/{MY_ENV_VAR}")
 def demo_env(MY_ENV_VAR: str):
-    return {"Hello": f"From: {os.environ.get(MY_ENV_VAR, 'No such env var')}"}
+    return {MY_ENV_VAR: os.environ.get(MY_ENV_VAR, 'No such env var')}
 
 
 @app.get("/allenv")
